@@ -58,7 +58,76 @@ function colour() {
 
 }
 
+//create random 8x8 grid from output 1
+function chessRand() {
+	var r = Math.random();
+	var g = Math.random();
+	var b = Math.random();
+	var r2 = Math.random();
+	var g2 = Math.random();
+	var b2 = Math.random();
+	
+	for (var x = 0; x < 8; x++) {
+		for (var y=0; y<8; y++) {
+			if ((x + y)%2 == 1) {
+				outlet(1, "setcell", x, y, "val", 1, r, g, b);
+			}
+			else{outlet(1, "setcell", x, y, "val", 1, r2, g2, b2);}
+		}
+	}
+	outlet(1, "bang");
+}
 
 
 
+/*
+function highlight(frame,x,y) {
+//	return (x > y) == (x+y<64);
+	return (frame > (x^y))
+}
 
+function patten(frame) {
+	var r = Math.random();
+	var g = Math.random();
+	var b = Math.random();
+	var r2 = Math.random();
+	var g2 = Math.random();
+	var b2 = Math.random();
+	for (var x = 0; x < 64; x++) {
+		for (var y=0; y<64; y++) {
+			if (highlight(frame, x, y)) {
+				outlet(1, "setcell", x, y, "val", 1, r, g, b);
+			}
+			else{outlet(1, "setcell", x, y, "val", 1, r2, g2, b2);}
+		}
+	}
+	outlet(1, "bang");
+}
+*/
+
+
+
+function pickColour(frame,x,y) {
+	if (frame > (x^y)){return (1); }
+	if (frame > (x|y)) {return (2);}
+	else {return (0);}
+}
+function highlight(frame,x,y) {
+//	return (x > y) == (x+y<64);
+	return (frame > (x^y))
+}
+
+function patten(frame) {
+	var c1 = [Math.random(), Math.random(), Math.random()];
+	var c2 = [Math.random(), Math.random(), Math.random()];
+	var allColours = [c1, c2];
+	var colour;
+	for (var x = 0; x < 64; x++) {
+		for (var y=0; y<64; y++) {
+			colour = allColours[pickColour(frame, x, y)];
+			outlet(1, "setcell", x, y, "val", 1, colour[0], colour[1], colour[2]);
+			
+		}
+	}
+	outlet(1, "bang");
+}
